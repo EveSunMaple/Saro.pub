@@ -1,0 +1,79 @@
+@tailwind utilities;
+@plugin "daisyui";
+
+
+/* --- 浅色主题：elegant-green --- */
+@plugin "daisyui/theme" {
+  /* 主题元数据 */
+  name: "elegant-green";
+  default: true;          /* 将此主题设为默认主题 */
+  prefersdark: false;       /* 不作为暗黑模式的默认主题 */
+  color-scheme: light;    /* 浏览器UI应为浅色 (例如滚动条) */
+
+  /* 颜色变量 (注意格式：--color- 开头，以分号结尾) */
+  --color-primary: #A7C1A8;
+  --color-primary-content: #FFFFFF;
+  --color-secondary: #819A91;
+  --color-secondary-content: #FFFFFF;
+  --color-accent: #819A91;
+  --color-accent-content: #FFFFFF;
+  --color-neutral: #D1D8BE;
+  --color-neutral-content: #819A91;
+  --color-base-100: #EEEFE0;
+  --color-base-200: #D1D8BE;
+  --color-base-300: #A7C1A8;
+  --color-base-content: #5c665e;
+  --color-info: #3abff8;
+  --color-success: #36d399;
+  --color-warning: #fbbd23;
+  --color-error: #f87272;
+
+  /* 细节和样式变量 (注意格式：-- 开头，以分号结尾) */
+  --radius-box: 1.5rem;
+  --radius-btn: 1.2rem;
+  --radius-badge: 1.9rem;
+  --animation-btn: 0.25s;
+  --animation-input: 0.2s;
+  --btn-focus-scale: 0.95;
+  --border-btn: 1px;
+  --tab-border: 1px;
+  --tab-radius: 0.8rem;
+}
+
+/* --- 黑夜主题：serene-night --- */
+@plugin "daisyui/theme" {
+  /* 主题元数据 */
+  name: "serene-night";
+  default: false;         /* 不作为默认主题 */
+  prefersdark: true;        /* 将此主题设为暗黑模式的默认主题 */
+  color-scheme: dark;     /* 浏览器UI应为深色 */
+
+  /* 颜色变量 */
+  --color-primary: #9DB2BF;
+  --color-primary-content: #27374D;
+  --color-secondary: #526D82;
+  --color-secondary-content: #DDE6ED;
+  --color-accent: #9DB2BF;
+  --color-accent-content: #27374D;
+  --color-neutral: #526D82;
+  --color-neutral-content: #DDE6ED;
+  --color-base-100: #27374D;
+  --color-base-200: #526D82;
+  --color-base-300: #27374D;
+  --color-base-content: #DDE6ED;
+  --color-info: #3abff8;
+  --color-success: #36d399;
+  --color-warning: #fbbd23;
+  --color-error: #f87272;
+  
+  /* 细节和样式变量 (与浅色主题保持一致) */
+  --radius-box: 1.5rem;
+  --radius-btn: 1.2rem;
+  --radius-badge: 1.9rem;
+  --animation-btn: 0.25s;
+  --animation-input: 0.2s;
+  --btn-focus-scale: 0.95;
+  --border-btn: 1px;
+  --tab-border: 1px;
+  --tab-radius: 0.8rem;
+}

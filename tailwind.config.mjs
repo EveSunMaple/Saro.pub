@@ -1,0 +1,46 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    require('daisyui'),
+  ],
+  daisyui: {
+    themes: [
+      {
+        // --- 浅色主题 ---
+        'elegant-green': {
+          'primary': '#A7C1A8', 'primary-content': '#FFFFFF',
+          'secondary': '#819A91', 'secondary-content': '#FFFFFF',
+          'accent': '#819A91', 'accent-content': '#FFFFFF',
+          'neutral': '#D1D8BE', 'neutral-content': '#819A91',
+          'base-100': '#EEEFE0', 'base-200': '#D1D8BE', 'base-300': '#A7C1A8',
+          'base-content': '#5c665e',
+          'info': '#3abff8', 'success': '#36d399', 'warning': '#fbbd23', 'error': '#f87272',
+          '--rounded-box': '1rem', '--rounded-btn': '0.8rem', '--rounded-badge': '1.9rem',
+          '--animation-btn': '0.25s', '--animation-input': '0.2s',
+          '--btn-focus-scale': '0.95', '--border-btn': '1px', '--tab-border': '1px', '--tab-radius': '0.8rem',
+        },
+      },
+      {
+        // --- 黑夜主题 ---
+        'serene-night': {
+          'primary': '#9DB2BF', 'primary-content': '#27374D',
+          'secondary': '#526D82', 'secondary-content': '#DDE6ED',
+          'accent': '#9DB2BF', 'accent-content': '#27374D',
+          'neutral': '#526D82', 'neutral-content': '#DDE6ED',
+          'base-100': '#27374D', 'base-200': '#526D82', 'base-300': '#27374D',
+          'base-content': '#DDE6ED',
+          'info': '#3abff8', 'success': '#36d399', 'warning': '#fbbd23', 'error': '#f87272',
+          '--rounded-box': '1rem', '--rounded-btn': '0.8rem', '--rounded-badge': '1.9rem',
+          '--animation-btn': '0.25s', '--animation-input': '0.2s',
+          '--btn-focus-scale': '0.95', '--border-btn': '1px', '--tab-border': '1px', '--tab-radius': '0.8rem',
+        },
+      },
+    ],
+  },
+};

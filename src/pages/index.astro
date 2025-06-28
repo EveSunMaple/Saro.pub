@@ -1,16 +1,89 @@
 ---
+import Layout from "@layouts/Layout.astro";
+import TelegramLayout from "@layouts/TelegramLayout.astro";
 
+// 这是我们之前设计好的单条动态的HTML结构，现在我们创建几个示例
+// 你未来的JS脚本只需要动态生成这些HTML字符串即可
+
+const dynamicItems = [
+  {
+    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    channelName: 'サン猫の時間漂流',
+    time: '3小时前',
+    content: `<p>突然发现，Astro 的孤岛架构（Islands Architecture）和“人生碎片”这个概念不谋而合。重要的、需要交互的时刻是孤岛，而大部分静态的记忆构成了广阔的海洋。</p><p>或许，每个人的生活都是一个由无数静态HTML和几个交互式组件构成的网站吧。</p>`,
+    views: '2.1k',
+    comments: '32',
+  },
+  {
+    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    channelName: 'サン猫の時間漂流',
+    time: '昨天 21:45',
+    content: `<p>分享一首歌，最近一直在单曲循环。</p>
+      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" class="mt-2 flex items-center gap-4 p-3 border border-base-content/10 rounded-box hover:bg-base-300/50 transition-colors duration-300 not-prose no-underline">
+        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/sddefault.jpg" class="w-24 h-auto rounded-lg object-cover" alt="Youtube Thumbnail">
+        <div>
+          <strong class="line-clamp-2">Rick Astley - Never Gonna Give You Up (Official Music Video)</strong>
+          <span class="text-xs text-base-content/60 block mt-1">youtube.com</span>
+        </div>
+      </a>
+    `,
+    views: '8.8k',
+    comments: '128',
+  },
+  {
+    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    channelName: 'サン猫の時間漂流',
+    time: '2025年6月26日',
+    content: `<p>午后的阳光和猫，就是完美的组合。</p>
+      <img src="https://loremflickr.com/640/360/cat,sleeping" alt="A sleeping cat in the sun" class="mt-2 rounded-box object-cover w-full">
+    `,
+    views: '5.5k',
+    comments: '66',
+  }
+]
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="首页">
+  <TelegramLayout>
+    {dynamicItems.map(item => (
+      <article class="dynamic-item-card flex flex-col gap-4 p-6 bg-base-200 rounded-box shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div class="avatar">
+              <div class="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <img src={item.avatar} alt="Channel Avatar" />
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex flex-col flex-grow">
+            <div class="flex justify-between items-center text-sm text-base-content/60">
+              <span class="font-bold text-base-content">{item.channelName}</span>
+              <span>{item.time}</span>
+            </div>
+            
+            <div class="prose prose-sm max-w-none mt-2" set:html={item.content} />
+          </div>
+        </div>
+      
+        <div class="flex gap-4">
+          <div class="w-12 flex justify-center flex-shrink-0">
+            <div class="w-1 h-full bg-base-300/70 rounded-full"></div>
+          </div>
+          
+          <div class="flex-grow flex items-center justify-end gap-4 text-sm text-base-content/60">
+            <div class="flex items-center gap-1">
+              <i class="ri-eye-line align-middle"></i>
+              <span>{item.views}</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <i class="ri-message-3-line align-middle"></i>
+              <span>{item.comments}</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    ))}
+  </TelegramLayout>
+</Layout>
