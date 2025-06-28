@@ -1,16 +1,20 @@
 ---
 // src/layouts/TelegramLayout.astro
 ---
-<section>
-  <header class="mb-8">
-    <h2 class="text-2xl font-bold flex items-center gap-2">
-      <i class="ri-rss-fill text-primary"></i>
-      <span>时光碎片</span>
-    </h2>
-    <p class="text-base-content/60 mt-1">一些随性的记录和不成熟的想法。</p>
+<section class="space-y-8">
+  <header class="text-center lg:text-left">
+    <div class="flex items-center justify-center lg:justify-start space-x-3 mb-4">
+      <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
+        <i class="ri-rss-fill text-primary-content text-xl"></i>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-base-content">实时动态</h2>
+        <p class="text-base-content/60 text-sm">来自 Telegram 频道的最新消息</p>
+      </div>
+    </div>
   </header>
   
-  <div class="flex flex-col gap-8">
+  <div class="space-y-6">
     <slot />
   </div>
 </section>

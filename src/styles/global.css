@@ -1,7 +1,6 @@
 @tailwind utilities;
 @plugin "daisyui";
 
-
 /* --- 浅色主题：elegant-green --- */
 @plugin "daisyui/theme" {
   /* 主题元数据 */
@@ -76,4 +75,76 @@
   --border-btn: 1px;
   --tab-border: 1px;
   --tab-radius: 0.8rem;
+}
+
+/* 自定义样式 */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* 动态项目样式 */
+.dynamic-item {
+  position: relative;
+}
+
+/* 毛玻璃效果增强 */
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+}
+
+/* 渐变文字效果 */
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .dynamic-item .grid {
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+  }
+  
+  .dynamic-item .avatar .w-12 {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
 }
