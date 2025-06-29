@@ -1,5 +1,6 @@
 ---
 import "@styles/global.css";
+import "@styles/background.css";
 import "remixicon/fonts/remixicon.css";
 
 const SITE_TITLE = "サン猫の時間漂流";
@@ -48,75 +49,25 @@ const socialImageURL = new URL(image, Astro.site);
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={socialImageURL} />
 </head>
-<body class="bg-base-100 text-base-content min-h-screen">
+<body class="bg-base-100 text-base-content min-h-screen flex flex-col">
 
-  <!-- 顶部导航栏 -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-base-100/90 border-b border-base-content/10">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between h-14">
-        <!-- Logo -->
-        <div class="flex items-center space-x-3">
-          <a href="/" class="flex items-center space-x-2 group">
-            <div class="w-7 h-7 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <i class="ri-leaf-line text-primary-content text-sm"></i>
-            </div>
-            <span class="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              {SITE_TITLE}
-            </span>
-          </a>
-        </div>
-        
-        <!-- 导航菜单 -->
-        <nav class="hidden md:flex items-center space-x-6">
-          <a href="/" class="nav-link text-sm text-base-content/80 hover:text-primary transition-colors duration-300 font-medium">
-            动态
-          </a>
-          <a href="/blog" class="nav-link text-sm text-base-content/80 hover:text-primary transition-colors duration-300 font-medium">
-            博客
-          </a>
-          <a href="/about" class="nav-link text-sm text-base-content/80 hover:text-primary transition-colors duration-300 font-medium">
-            关于
-          </a>
-        </nav>
-
-        <!-- 移动端菜单按钮 -->
-        <div class="md:hidden">
-          <button class="btn btn-ghost btn-sm">
-            <i class="ri-menu-line text-lg"></i>
-          </button>
-        </div>
+  <header class="sticky top-0 z-50">
+    <div class="navbar bg-base-100/80 backdrop-blur-sm border-b border-base-content/10">
+      <div class="navbar-start">
+        <a href="/" class="btn btn-ghost text-xl normal-case">{SITE_TITLE}</a>
+      </div>
+      <div class="navbar-end">
+        <ul class="menu menu-horizontal px-1">
+          <li><a href="/" class="active">动态</a></li>
+          <li><a href="/blog">博客</a></li>
+          <li><a href="/about">关于</a></li>
+        </ul>
       </div>
     </div>
   </header>
 
-  <!-- Hero Banner -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-base-100 via-base-200/30 to-base-300/20">
-    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23A7C1A8" fill-opacity="0.03"%3E%3Ccircle cx="20" cy="20" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-60"></div>
-    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12">
-      <div class="text-center max-w-2xl mx-auto">
-        <h1 class="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-tight">
-          时光碎片
-        </h1>
-        <p class="text-base text-base-content/70 mb-6 leading-relaxed">
-          {SITE_DESCRIPTION}
-        </p>
-        <div class="flex items-center justify-center space-x-4 text-sm text-base-content/60">
-          <div class="flex items-center space-x-1">
-            <i class="ri-map-pin-line text-primary text-sm"></i>
-            <span>数字世界</span>
-          </div>
-          <div class="flex items-center space-x-1">
-            <i class="ri-time-line text-primary text-sm"></i>
-            <span>持续更新</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 主要内容区域 -->
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+  <div class="max-w-screen-xl mx-auto px-4 py-8 flex-grow w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       
       <!-- 主要内容 -->
       <main class="lg:col-span-3">

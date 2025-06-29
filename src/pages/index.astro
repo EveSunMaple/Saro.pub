@@ -4,7 +4,7 @@ import TelegramLayout from "@layouts/TelegramLayout.astro";
 
 const dynamicItems = [
   {
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    avatar: 'avatar.webp',
     channelName: 'サン猫の時間漂流',
     time: '3小时前',
     content: `<p>突然发现，Astro 的孤岛架构（Islands Architecture）和"人生碎片"这个概念不谋而合。重要的、需要交互的时刻是孤岛，而大部分静态的记忆构成了广阔的海洋。</p><p>或许，每个人的生活都是一个由无数静态HTML和几个交互式组件构成的网站吧。</p>`,
@@ -12,7 +12,7 @@ const dynamicItems = [
     comments: '32',
   },
   {
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    avatar: 'avatar.webp',
     channelName: 'サン猫の時間漂流',
     time: '昨天 21:45',
     content: `<p>分享一首歌，最近一直在单曲循环。</p>
@@ -28,7 +28,7 @@ const dynamicItems = [
     comments: '128',
   },
   {
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    avatar: 'avatar.webp',
     channelName: 'サン猫の時間漂流',
     time: '2天前',
     content: `<p>午后的阳光和猫，就是完美的组合。</p>
@@ -38,7 +38,7 @@ const dynamicItems = [
     comments: '66',
   },
   {
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+    avatar: 'avatar.webp',
     channelName: 'サン猫の時間漂流',
     time: '3天前',
     content: `<p>今天学到了一个新的 CSS 技巧，使用 backdrop-filter 可以创建非常漂亮的毛玻璃效果。现代浏览器的支持度已经很好了，可以放心使用。</p>
@@ -56,30 +56,20 @@ const dynamicItems = [
   <TelegramLayout>
     {dynamicItems.map((item, index) => (
       <article class="dynamic-item group">
-        <!-- 四网格布局 -->
         <div class="grid grid-cols-[auto_1fr] gap-3">
-          
-          <!-- 左侧列：头像和连接线 -->
           <div class="flex flex-col items-center">
-            <!-- 头像 -->
             <div class="avatar mb-2">
               <div class="w-8 h-8 rounded-full ring-1 ring-primary/20 ring-offset-1 ring-offset-base-100 group-hover:ring-primary/40 transition-all duration-300">
-                <img src={item.avatar} alt="Channel Avatar" />
+                <img src="avatar.webp" alt="Channel Avatar" />
               </div>
             </div>
-            
-            <!-- 连接线 (除了最后一个动态) -->
             {index < dynamicItems.length - 1 && (
-              <div class="w-0.5 flex-1 bg-gradient-to-b from-primary/30 to-transparent rounded-full min-h-[1.5rem]"></div>
+              <div class="w-0.5 flex-1 bg-primary/30 rounded-full min-h-[1.5rem]"></div>
             )}
           </div>
-          
-          <!-- 右侧列：内容区域 -->
-          <div class="flex-1 pb-4">
-            <!-- 内容卡片 -->
+          <div class="flex-1">
             <div class="bg-base-200/30 backdrop-blur-sm rounded-xl p-4 border border-base-content/5 hover:border-primary/20 hover:bg-base-200/50 transition-all duration-300 group-hover:shadow-md group-hover:-translate-y-0.5">
               
-              <!-- 头部信息 -->
               <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center space-x-2">
                   <h3 class="font-medium text-sm text-base-content">{item.channelName}</h3>
@@ -88,10 +78,8 @@ const dynamicItems = [
                 </div>
               </div>
               
-              <!-- 动态内容 -->
               <div class="prose prose-sm max-w-none mb-3 text-base-content/80 text-sm leading-relaxed" set:html={item.content} />
               
-              <!-- 底部统计 -->
               <div class="flex items-center justify-between pt-3 border-t border-base-content/5">
                 <div class="flex items-center space-x-4 text-xs text-base-content/60">
                   <div class="flex items-center space-x-1 hover:text-primary transition-colors duration-300 cursor-pointer">
@@ -108,7 +96,6 @@ const dynamicItems = [
                   </div>
                 </div>
                 
-                <!-- 操作按钮 -->
                 <div class="flex items-center space-x-1">
                   <button class="btn btn-ghost btn-xs btn-circle hover:btn-primary">
                     <i class="ri-heart-line text-xs"></i>
