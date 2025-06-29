@@ -1,0 +1,178 @@
+---
+// src/components/blog/ShareButtons.astro
+interface Props {
+  title: string;
+  url: string;
+  description?: string;
+}
+
+const { title, url, description = '' } = Astro.props;
+
+// 编码分享内容
+const encodedTitle = encodeURIComponent(title);
+const encodedUrl = encodeURIComponent(url);
+const encodedDescription = encodeURIComponent(description);
+
+// 分享链接
+const shareLinks = {
+  twitter: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
+  facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+  linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+  telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`,
+  weibo: `https://service.weibo.com/share/share.php?url=${encodedUrl}&title=${encodedTitle}`,
+  qq: `https://connect.qq.com/widget/shareqq/index.html?url=${encodedUrl}&title=${encodedTitle}&desc=${encodedDescription}`,
+};
+
+const baseButtonClasses = "flex items-center justify-center gap-2 px-3 py-2 text-xs sm:px-4 sm:py-3 sm:text-sm rounded-xl font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2";
+---
+
+<div class="bg-gradient-to-r from-base-200/30 to-base-300/20 rounded-2xl p-6 border border-base-content/5 relative">
+  <div class="mb-6 text-center">
+    <h3 class="text-lg font-bold text-base-content mb-2 flex items-center justify-center gap-2">
+      <i class="ri-share-line"></i>
+      分享这篇文章
+    </h3>
+    <p class="text-sm text-base-content/60">如果你觉得这篇文章有用，不妨分享给更多人</p>
+  </div>
+
+  <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
+    <a 
+      href={shareLinks.twitter}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={[baseButtonClasses, "bg-[#1DA1F2] text-white hover:bg-[#1a91da] focus:ring-[#1DA1F2]"]}
+      aria-label="分享到 Twitter"
+    >
+      <i class="ri-twitter-x-line"></i>
+      <span class="hidden sm:inline">Twitter</span>
+    </a>
+
+    <a 
+      href={shareLinks.facebook}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={[baseButtonClasses, "bg-[#4267B2] text-white hover:bg-[#365899] focus:ring-[#4267B2]"]}
+      aria-label="分享到 Facebook"
+    >
+      <i class="ri-facebook-line"></i>
+      <span class="hidden sm:inline">Facebook</span>
+    </a>
+
+    <a 
+      href={shareLinks.linkedin}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={[baseButtonClasses, "bg-[#0077B5] text-white hover:bg-[#006396] focus:ring-[#0077B5]"]}
+      aria-label="分享到 LinkedIn"
+    >
+      <i class="ri-linkedin-line"></i>
+      <span class="hidden sm:inline">LinkedIn</span>
+    </a>
+
+    <a 
+      href={shareLinks.telegram}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={[baseButtonClasses, "bg-[#0088cc] text-white hover:bg-[#0077b3] focus:ring-[#0088cc]"]}
+      aria-label="分享到 Telegram"
+    >
+      <i class="ri-telegram-line"></i>
+      <span class="hidden sm:inline">Telegram</span>
+    </a>
+
+    <a 
+      href={shareLinks.weibo}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={[baseButtonClasses, "bg-[#E6162D] text-white hover:bg-[#d01426] focus:ring-[#E6162D]"]}
+      aria-label="分享到微博"
+    >
+      <i class="ri-weibo-line"></i>
+      <span class="hidden sm:inline">微博</span>
+    </a>
+
+    <a 
+      href={shareLinks.qq}
+      target="_blank"
+      rel="noopener noreferrer"
+      class:list={[baseButtonClasses, "bg-[#12B7F5] text-white hover:bg-[#0ea5e9] focus:ring-[#12B7F5]"]}
+      aria-label="分享到 QQ"
+    >
+      <i class="ri-qq-line"></i>
+      <span class="hidden sm:inline">QQ</span>
+    </a>
+
+    <button 
+      class:list={[baseButtonClasses, "copy-link bg-base-content text-base-100 hover:bg-base-content/90 focus:ring-base-content"]}
+      data-url={url}
+      aria-label="复制链接"
+    >
+      <i class="ri-link"></i>
+      <span><span class="hidden sm:inline">复制</span>链接</span>
+    </button>
+  </div>
+
+  <div id="copy-toast" class="hidden absolute top-2 right-2 bg-success text-success-content px-3 py-2 rounded-lg text-sm flex items-center gap-2 shadow-lg transition-all duration-300 transform translate-y-2 opacity-0">
+    <i class="ri-check-line"></i>
+    <span>链接已复制</span>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const copyButton = document.querySelector('.copy-link');
+    const copyToast = document.getElementById('copy-toast');
+    
+    if (copyButton && copyToast) {
+      const originalIconClass = 'ri-link';
+      const originalText = copyButton.querySelector('span').innerHTML;
+      const originalButtonClasses = ['bg-base-content', 'text-base-100', 'hover:bg-base-content/90'];
+      const copiedButtonClasses = ['bg-success', 'text-success-content'];
+
+      copyButton.addEventListener('click', async () => {
+        const url = copyButton.getAttribute('data-url');
+        if (!url || copyButton.classList.contains('copied-state')) return;
+
+        try {
+          await navigator.clipboard.writeText(url);
+          
+          // Show toast
+          copyToast.classList.remove('hidden', 'translate-y-2', 'opacity-0');
+          copyToast.classList.add('translate-y-0', 'opacity-100');
+
+          // Update button state
+          const icon = copyButton.querySelector('i');
+          const text = copyButton.querySelector('span');
+          copyButton.classList.add('copied-state');
+          
+          if (icon && text) {
+            icon.className = 'ri-check-line';
+            text.innerHTML = '已复制';
+            copyButton.classList.remove(...originalButtonClasses);
+            copyButton.classList.add(...copiedButtonClasses);
+          }
+          
+          // Revert after 3 seconds
+          setTimeout(() => {
+            copyToast.classList.remove('translate-y-0', 'opacity-100');
+            copyToast.classList.add('translate-y-2', 'opacity-0');
+            
+            if (icon && text) {
+              icon.className = originalIconClass;
+              text.innerHTML = originalText;
+              copyButton.classList.remove(...copiedButtonClasses);
+              copyButton.classList.add(...originalButtonClasses);
+              copyButton.classList.remove('copied-state');
+            }
+            // Hide toast after transition
+            setTimeout(() => copyToast.classList.add('hidden'), 300);
+          }, 3000);
+          
+        } catch (err) {
+          console.error('复制失败:', err);
+          // Fallback can be added here if needed
+        }
+      });
+    }
+  });
+</script>

@@ -1,8 +1,8 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@layouts/Layout.astro';
-// 注意：现在我们不再需要直接在这里引入 TOC 了，因为它已经被包含在 Sidebar 中
 import PostFooter from '@components/blog/PostFooter.astro';
+import ShareButtons from '@components/blog/ShareButtons.astro';
 import dayjs from '@/lib/telegram/dayjs-setup';
 
 export const prerender = true;
@@ -17,54 +17,158 @@ export async function getStaticPaths() {
 
 type Props = { entry: CollectionEntry<'blog'> };
 const { entry } = Astro.props;
-const { Content, headings } = await entry.render(); // 我们在这里获取 headings
-const { title, description, pubDate, updated, image, author = 'EveSunMaple' } = entry.data;
+const { Content, headings } = await entry.render();
+const { title, description, pubDate, updated, image} = entry.data;
 
+const author = 'EveSunMaple';
 const wordsPerMinute = 200;
 const words = entry.body.split(/\s+/g).length;
 const minutes = Math.ceil(words / wordsPerMinute);
 const readTime = `预计阅读 ${minutes} 分钟`;
+
+// 获取相关文章
+const allPosts = await getCollection('blog', ({ data }) => data.draft !== true);
+const relatedPosts = allPosts
+  .filter(post => post.slug !== entry.slug)
+  .slice(0, 3);
+
+const currentUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 <Layout title={title} description={description} image={image} headings={headings}>
-  <article>
-    <header class="mb-10">
-      {image && <img src={image} alt={title} class="w-full h-auto max-h-[500px] object-cover rounded-xl mb-6 shadow-lg" />}
-      <h1 class="text-3xl md:text-4xl font-extrabold leading-tight text-base-content mb-4">{title}</h1>
-      <p class="text-lg text-base-content/70">{description}</p>
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-base-content/60 mt-6 border-t border-b border-base-content/10 py-3">
-        <div class="flex items-center gap-2">
-          <div class="avatar w-8 h-8">
-            <img src="/avatar.webp" class="rounded-full" alt={author} />
-          </div>
-          <span>{author}</span>
+  <article class="max-w-4xl mx-auto">
+    <header class="mb-12 animate-fade-in">
+      {image && (
+        <div class="relative aspect-[21/9] overflow-hidden rounded-3xl mb-8 shadow-2xl">
+          <img 
+            src={image} 
+            alt={title} 
+            class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+            loading="eager"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
         </div>
-        <span class="opacity-50 hidden sm:inline">|</span>
-        <span>发布于 {dayjs(pubDate).format('YYYY年MM月DD日')}</span>
-        <span class="opacity-50 hidden sm:inline">|</span>
-        <span>{readTime}</span>
+      )}
+      
+      <div class="space-y-6">
+        <div class="flex items-center gap-2 text-sm text-base-content/60">
+          <a href="/" class="hover:text-primary transition-colors duration-200">首页</a>
+          <i class="ri-arrow-right-s-line text-base-content/40"></i>
+          <a href="/rss.xml" class="hover:text-primary transition-colors duration-200">博客</a>
+          <i class="ri-arrow-right-s-line text-base-content/40"></i>
+          <span class="text-base-content/80 font-medium">正文</span>
+        </div>
+
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-base-content leading-tight">{title}</h1>
+        <p class="text-lg md:text-xl text-base-content/70 leading-relaxed">{description}</p>
+        
+        <div class="flex flex-col sm:flex-row sm:items-center gap-6 p-6 bg-base-200/50 rounded-2xl border border-base-content/5">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full ring-2 ring-primary/20 ring-offset-2 ring-offset-base-100">
+              <img src="/avatar.webp" class="w-full h-full rounded-full object-cover" alt={author} />
+            </div>
+            <div class="flex flex-col">
+              <span class="font-semibold text-base-content">{author}</span>
+              <span class="text-sm text-base-content/60">独立开发者</span>
+            </div>
+          </div>
+          
+          <div class="hidden sm:block w-px h-8 bg-base-content/20"></div>
+          
+          <div class="flex flex-wrap gap-4 text-sm text-base-content/60">
+            <div class="flex items-center gap-2">
+              <i class="ri-calendar-line"></i>
+              <span>{dayjs(pubDate).format('YYYY年MM月DD日')}</span>
+            </div>
+            {updated && (
+              <div class="flex items-center gap-2">
+                <i class="ri-refresh-line"></i>
+                <span>更新于 {dayjs(updated).format('MM月DD日')}</span>
+              </div>
+            )}
+            <div class="flex items-center gap-2">
+              <i class="ri-time-line"></i>
+              <span>{readTime}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="ri-eye-line"></i>
+              <span>{words} 字</span>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
-    <div 
-      class="prose max-w-none 
-             prose-sm sm:prose-base 
-             prose-p:text-base-content/90
-             prose-headings:text-base-content prose-headings:font-bold
-             prose-strong:text-base-content
-             prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-             prose-blockquote:border-primary prose-blockquote:bg-base-200/30 prose-blockquote:rounded-r-lg
-             prose-img:rounded-xl prose-img:shadow-md
-             prose-hr:border-base-content/10"
-    >
-      <Content />
-    </div>
+    <main class="mb-12 animate-fade-in" style="animation-delay: 0.2s;">
+      <div class="bg-base-200/40 backdrop-blur-sm rounded-3xl p-6 md:p-8 lg:p-12 shadow-sm border border-base-content/5">
+        <div class="prose prose max-w-none">
+          <Content />
+        </div>
+      </div>
+    </main>
 
-    <PostFooter post={entry} author={author} />
+    <section class="mb-12 animate-fade-in" style="animation-delay: 0.4s;">
+      <ShareButtons title={title} url={currentUrl} description={description} />
+    </section>
 
-    <section id="comments" class="mt-12">
-      <h2 class="text-2xl font-bold mb-4">发表评论</h2>
-      <div class="bg-base-200/40 rounded-xl p-8 text-center text-base-content/60">
-        <p>评论系统（如 Giscus, Waline）即将在此处登场...</p>
+    <footer class="mb-16 animate-fade-in" style="animation-delay: 0.6s;">
+      <PostFooter post={entry} author={author} />
+    </footer>
+
+    {relatedPosts.length > 0 && (
+      <section class="mb-16 animate-fade-in" style="animation-delay: 0.8s;">
+        <h2 class="text-2xl font-bold text-base-content mb-8 flex items-center gap-3">
+          <i class="ri-links-line text-primary"></i>
+          相关文章
+        </h2>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
+          {relatedPosts.map(post => (
+            <a href={`/blog/${post.slug}`} class="group block bg-base-100 rounded-2xl overflow-hidden shadow-sm border border-base-content/5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              {post.data.image && (
+                <div class="aspect-video overflow-hidden">
+                  <img src={post.data.image} alt={post.data.title} loading="lazy" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                </div>
+              )}
+              <div class="p-6 space-y-3">
+                <h3 class="font-bold text-base-content line-clamp-2 group-hover:text-primary transition-colors duration-200">{post.data.title}</h3>
+                <p class="text-sm text-base-content/70 line-clamp-2">{post.data.description}</p>
+                <div class="flex items-center justify-between text-sm text-base-content/60">
+                  <span>{dayjs(post.data.pubDate).format('MM月DD日')}</span>
+                  <i class="ri-arrow-right-line group-hover:translate-x-1 transition-transform duration-200"></i>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="mb-16 animate-fade-in" style="animation-delay: 1s;">
+      <h2 class="text-2xl font-bold text-base-content mb-8 flex items-center gap-3">
+        <i class="ri-chat-3-line text-primary"></i>
+        发表评论
+      </h2>
+      <div class="bg-gradient-to-br from-base-200/30 to-base-300/20 rounded-3xl p-12 text-center border border-base-content/5">
+        <div class="w-20 h-20 mx-auto mb-6 bg-primary/10 rounded-full flex items-center justify-center text-4xl text-primary">
+          <i class="ri-chat-3-line"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-base-content mb-4">评论系统即将上线</h3>
+        <p class="text-base-content/70 mb-8 max-w-md mx-auto leading-relaxed">
+          我们正在集成 Giscus 评论系统，很快您就可以在这里分享您的想法和见解了。
+        </p>
+        <div class="flex flex-col md:flex-row flex-wrap justify-center gap-4 md:gap-6">
+          <div class="flex items-center gap-2 text-sm text-base-content/60">
+            <i class="ri-github-line"></i>
+            <span>GitHub 登录</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-base-content/60">
+            <i class="ri-markdown-line"></i>
+            <span>Markdown 支持</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-base-content/60">
+            <i class="ri-notification-line"></i>
+            <span>邮件通知</span>
+          </div>
+        </div>
       </div>
     </section>
   </article>

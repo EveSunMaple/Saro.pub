@@ -411,7 +411,7 @@ int pre()
 {
     int now = tree[root].ch[0];
     if (!now) return now;                          // 如果没有左子树，直接返回
-    while (tree[now].ch[1]) now = tree[now].ch[1]; // 在左子树中一直向右走   
+    while (tree[now].ch[1]) now = tree[now].ch[1]; // 在左子树中一直向右走
     splay(now, root);                              // 把找到的节点移动到根
     return now;
 }

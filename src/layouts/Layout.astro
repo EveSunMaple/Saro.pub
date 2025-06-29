@@ -8,6 +8,7 @@ import Header from '@components/layout/Header.astro';
 import Hero from '@components/layout/Hero.astro';
 import Sidebar from '@components/layout/Sidebar.astro';
 import Footer from '@components/layout/Footer.astro';
+import BackToTop from '@components/widgets/BackToTop.astro';
 
 const SITE_TITLE = "サン猫の時間漂流";
 const SITE_DESCRIPTION = "一个孤独的地方，散落着一个人的人生碎片";
@@ -22,6 +23,7 @@ export interface Props {
   description?: string;
   image?: string;
   headings?: MarkdownHeading[];
+  showHero?: boolean;
 }
 
 const { 
@@ -29,9 +31,10 @@ const {
   description = SITE_DESCRIPTION,
   image = OG_IMAGE_DEFAULT,
   headings = [],
+  showHero = title === '首页',
 } = Astro.props;
 
-const finalTitle = `${title} | ${SITE_TITLE}`;
+const finalTitle = title === '首页' ? SITE_TITLE : `${title} | ${SITE_TITLE}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImageURL = new URL(image, Astro.site);
 ---
@@ -42,33 +45,40 @@ const socialImageURL = new URL(image, Astro.site);
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content={Astro.generator} />
   <meta name="author" content={SITE_AUTHOR} />
+  
   <title>{finalTitle}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
+  
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  
   <meta property="og:title" content={finalTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonicalURL} />
   <meta property="og:image" content={socialImageURL} />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content={SITE_TITLE} />
+  <meta property="og:locale" content="zh_CN" />
+  
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content={TWITTER_HANDLE} />
   <meta name="twitter:title" content={finalTitle} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={socialImageURL} />
+  
 </head>
 <body class="bg-base-100 text-base-content min-h-screen topography">
 
   <Header siteTitle={SITE_TITLE} />
 
-  {title === '首页' && <Hero siteDescription={SITE_DESCRIPTION} />}
+  {showHero && <Hero siteDescription={SITE_DESCRIPTION} />}
 
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
       
-      <main class="lg:col-span-3">
+      <main class="lg:col-span-3 min-h-[60vh]">
         <slot />
       </main>
       
@@ -89,5 +99,6 @@ const socialImageURL = new URL(image, Astro.site);
     telegramUrl={TELEGRAM_URL}
   />
 
+  <BackToTop />
 </body>
 </html>
