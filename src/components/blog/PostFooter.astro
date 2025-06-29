@@ -1,0 +1,31 @@
+---
+// src/components/blog/PostFooter.astro
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  author: string;
+}
+const { post, author } = Astro.props;
+const { tags } = post.data;
+---
+<footer class="mt-12 pt-8 border-t border-base-content/10">
+  {tags && tags.length > 0 && (
+    <div class="mb-6">
+      <h3 class="text-lg font-bold mb-3">标签</h3>
+      <div class="flex flex-wrap gap-2">
+        {tags.map(tag => (
+          <a href={`/tags/${tag}`} class="badge badge-lg badge-outline hover:bg-primary hover:border-primary hover:text-primary-content transition-colors duration-300">{tag}</a>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <div class="bg-base-200/40 rounded-xl p-4 text-xs text-base-content/70 leading-relaxed">
+    <p><strong>版权声明：</strong>本文作者为 <strong>{author}</strong>，首发于<a href={Astro.url.href} class="link link-primary mx-1">{Astro.site?.hostname}</a>。</p>
+    <p class="mt-2 flex items-start gap-2">
+      <i class="ri-creative-commons-line mt-0.5"></i>
+      <span>遵循 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="link link-primary">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</span>
+    </p>
+  </div>
+</footer>

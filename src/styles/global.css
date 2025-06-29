@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@tailwind utilities;
 @plugin "daisyui";
+@plugin "@tailwindcss/typography";
 
 /* --- 浅色主题：elegant-green --- */
 @plugin "daisyui/theme" {
@@ -76,4 +76,12 @@
   --border-btn: 1px;
   --tab-border: 1px;
   --tab-radius: 0.5rem;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
 }

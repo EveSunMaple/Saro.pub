@@ -1,0 +1,71 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '@layouts/Layout.astro';
+// 注意：现在我们不再需要直接在这里引入 TOC 了，因为它已经被包含在 Sidebar 中
+import PostFooter from '@components/blog/PostFooter.astro';
+import dayjs from '@/lib/telegram/dayjs-setup';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog', ({ data }) => data.draft !== true);
+  return allPosts.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+type Props = { entry: CollectionEntry<'blog'> };
+const { entry } = Astro.props;
+const { Content, headings } = await entry.render(); // 我们在这里获取 headings
+const { title, description, pubDate, updated, image, author = 'EveSunMaple' } = entry.data;
+
+const wordsPerMinute = 200;
+const words = entry.body.split(/\s+/g).length;
+const minutes = Math.ceil(words / wordsPerMinute);
+const readTime = `预计阅读 ${minutes} 分钟`;
+---
+<Layout title={title} description={description} image={image} headings={headings}>
+  <article>
+    <header class="mb-10">
+      {image && <img src={image} alt={title} class="w-full h-auto max-h-[500px] object-cover rounded-xl mb-6 shadow-lg" />}
+      <h1 class="text-3xl md:text-4xl font-extrabold leading-tight text-base-content mb-4">{title}</h1>
+      <p class="text-lg text-base-content/70">{description}</p>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-base-content/60 mt-6 border-t border-b border-base-content/10 py-3">
+        <div class="flex items-center gap-2">
+          <div class="avatar w-8 h-8">
+            <img src="/avatar.webp" class="rounded-full" alt={author} />
+          </div>
+          <span>{author}</span>
+        </div>
+        <span class="opacity-50 hidden sm:inline">|</span>
+        <span>发布于 {dayjs(pubDate).format('YYYY年MM月DD日')}</span>
+        <span class="opacity-50 hidden sm:inline">|</span>
+        <span>{readTime}</span>
+      </div>
+    </header>
+
+    <div 
+      class="prose max-w-none 
+             prose-sm sm:prose-base 
+             prose-p:text-base-content/90
+             prose-headings:text-base-content prose-headings:font-bold
+             prose-strong:text-base-content
+             prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+             prose-blockquote:border-primary prose-blockquote:bg-base-200/30 prose-blockquote:rounded-r-lg
+             prose-img:rounded-xl prose-img:shadow-md
+             prose-hr:border-base-content/10"
+    >
+      <Content />
+    </div>
+
+    <PostFooter post={entry} author={author} />
+
+    <section id="comments" class="mt-12">
+      <h2 class="text-2xl font-bold mb-4">发表评论</h2>
+      <div class="bg-base-200/40 rounded-xl p-8 text-center text-base-content/60">
+        <p>评论系统（如 Giscus, Waline）即将在此处登场...</p>
+      </div>
+    </section>
+  </article>
+</Layout>

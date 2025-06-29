@@ -1,0 +1,25 @@
+---
+// src/pages/post/[id].astro
+import Layout from '@layouts/Layout.astro';
+import FeedCard from '@components/feed/FeedCard.astro';
+import { getPostById } from '@/lib/telegram';
+
+const { id } = Astro.params;
+
+// 如果 id 不存在或是无效格式，跳转 404
+if (!id) return Astro.redirect('/404');
+
+const post = await getPostById(Astro, id);
+
+if (!post) return Astro.redirect('/404');
+---
+<Layout title={`动态 #${post.id}`}>
+  <div class="max-w-3xl mx-auto">
+    <FeedCard post={post} isLastItem={true} />
+
+    <div class="mt-8">
+      <h3 class="text-xl font-bold mb-4">评论区</h3>
+      <p class="text-base-content/60">评论功能正在建设中...</p>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,29 @@
+---
+// src/components/layout/Footer.astro
+export interface Props {
+  author: string;
+  twitterHandle: string;
+  githubUrl: string;
+  telegramUrl: string;
+}
+
+const { author, twitterHandle, githubUrl, telegramUrl } = Astro.props;
+---
+<footer class="text-center py-8 text-base-content/60">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex justify-center space-x-4 mb-4">
+      <a href={`https://x.com/${twitterHandle.replace('@','')}`} target="_blank" class="hover:text-primary transition-colors duration-300">
+        <i class="ri-twitter-line text-lg"></i>
+      </a>
+      <a href={githubUrl} target="_blank" class="hover:text-primary transition-colors duration-300">
+        <i class="ri-github-line text-lg"></i>
+      </a>
+      <a href={telegramUrl} target="_blank" class="hover:text-primary transition-colors duration-300">
+        <i class="ri-telegram-line text-lg"></i>
+      </a>
+    </div>
+    <p class="text-xs">
+      © {new Date().getFullYear()} {author}. 用 ❤️ 和 Astro 构建
+    </p>
+  </div>
+</footer>

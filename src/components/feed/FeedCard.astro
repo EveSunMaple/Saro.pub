@@ -1,0 +1,70 @@
+---
+// src/components/feed/FeedCard.astro
+import type { TelegramPost } from '@/types';
+// 1. 引入新组件
+import MediaGrid from './MediaGrid.astro';
+import LinkPreview from './LinkPreview.astro';
+
+interface Props {
+  post: TelegramPost;
+  isLastItem?: boolean;
+}
+
+const { post, isLastItem = false } = Astro.props;
+---
+<article class="dynamic-item group">
+  <div class="grid grid-cols-[auto_1fr] gap-3">
+    <div class="flex flex-col items-center">
+      <div class="avatar mb-2">
+        <div class="w-8 h-8 rounded-full ring-1 ring-primary/20 ring-offset-1 ring-offset-base-100 group-hover:ring-primary/40 transition-all duration-300">
+          <img src="/avatar.webp" alt="Channel Avatar" />
+        </div>
+      </div>
+      {!isLastItem && (
+        <div class="w-0.5 flex-1 bg-primary/30 rounded-full min-h-[1.5rem]"></div>
+      )}
+    </div>
+    
+    <div class="relative bg-base-200/30 backdrop-blur-sm rounded-xl border border-base-content/5 group-hover:border-primary/20 group-hover:bg-base-200/50 transition-all duration-300 group-hover:shadow-md">
+      <div class="p-4">
+        <a href={`/post/${post.id}`} class="flex items-center justify-between mb-3">
+          <h3 class="font-medium text-sm text-base-content">サン猫の時間漂流</h3>
+          <span class="text-xs text-base-content/60">{post.formattedDate}</span>
+        </a>
+        
+        {post.reply && (
+          <blockquote class="text-xs p-2 bg-base-300/30 rounded-md mb-2 border-l-2 border-primary not-prose">
+            <p class="font-bold">{post.reply.author}</p>
+            <p class="opacity-70 truncate">{post.reply.text}</p>
+          </blockquote>
+        )}
+
+        <div class="prose prose-sm max-w-none mb-3 text-base-content/80 text-sm leading-relaxed" set:html={post.htmlContent} />
+        
+        {post.media.length > 0 && (
+          <MediaGrid media={post.media} postId={post.id} />
+        )}
+        
+        {post.linkPreview && (
+          <LinkPreview link={post.linkPreview} />
+        )}
+
+        <footer class="flex items-center justify-between pt-3 border-t border-base-content/5 mt-3">
+          <div class="flex items-center space-x-4 text-xs text-base-content/60">
+            <div class="flex items-center space-x-1"><i class="ri-eye-line text-xs"></i><span>{post.views}</span></div>
+          </div>
+          <div class="relative z-10 flex items-center space-x-1">
+            <button class="btn btn-ghost btn-xs btn-circle"><i class="ri-heart-line text-xs"></i></button>
+          </div>
+        </footer>
+      </div>
+
+      <div class="relative z-10 border-t border-base-content/5 px-2 py-2">
+        <div class="flex items-center gap-2">
+          <input type="text" placeholder="留下你的想法..." class="input input-sm w-full focus:bg-base-200/50 text-xs" />
+          <button class="btn btn-ghost btn-sm" aria-label="发送评论"><i class="ri-send-plane-2-line text-sm"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

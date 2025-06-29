@@ -3,22 +3,32 @@ import "@styles/global.css";
 import "@styles/background.css";
 import "remixicon/fonts/remixicon.css";
 
+import type { MarkdownHeading } from 'astro';
+import Header from '@components/layout/Header.astro';
+import Hero from '@components/layout/Hero.astro';
+import Sidebar from '@components/layout/Sidebar.astro';
+import Footer from '@components/layout/Footer.astro';
+
 const SITE_TITLE = "サン猫の時間漂流";
 const SITE_DESCRIPTION = "一个孤独的地方，散落着一个人的人生碎片";
 const SITE_AUTHOR = "EveSunMaple";
 const OG_IMAGE_DEFAULT = "/default-social-image.png";
 const TWITTER_HANDLE = "@EveSunMaple";
+const GITHUB_URL = "https://github.com/EveSunMaple";
+const TELEGRAM_URL = "https://t.me/saroprock";
 
 export interface Props {
   title: string;
   description?: string;
   image?: string;
+  headings?: MarkdownHeading[];
 }
 
 const { 
   title, 
   description = SITE_DESCRIPTION,
   image = OG_IMAGE_DEFAULT,
+  headings = [],
 } = Astro.props;
 
 const finalTitle = `${title} | ${SITE_TITLE}`;
@@ -51,204 +61,33 @@ const socialImageURL = new URL(image, Astro.site);
 </head>
 <body class="bg-base-100 text-base-content min-h-screen topography">
 
-  <!-- 顶部导航栏 -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-base-100/90 border-b border-base-content/10">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between h-14">
-        <!-- Logo -->
-        <div class="flex items-center space-x-3">
-          <a href="/" class="flex items-center space-x-2 group">
-            <div class="w-7 h-7 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <i class="ri-leaf-line text-primary-content text-sm"></i>
-            </div>
-            <span class="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              {SITE_TITLE}
-            </span>
-          </a>
-        </div>
-        
-        <!-- 导航菜单 -->
-        <nav class="hidden md:flex items-center space-x-6">
-          <a href="/" class="nav-link text-sm text-base-content/80 hover:text-primary transition-colors duration-300 font-medium">
-            动态
-          </a>
-          <a href="/blog" class="nav-link text-sm text-base-content/80 hover:text-primary transition-colors duration-300 font-medium">
-            博客
-          </a>
-          <a href="/about" class="nav-link text-sm text-base-content/80 hover:text-primary transition-colors duration-300 font-medium">
-            关于
-          </a>
-        </nav>
+  <Header siteTitle={SITE_TITLE} />
 
-        <!-- 移动端菜单按钮 -->
-        <div class="md:hidden">
-          <button class="btn btn-ghost btn-sm">
-            <i class="ri-menu-line text-lg"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
+  {title === '首页' && <Hero siteDescription={SITE_DESCRIPTION} />}
 
-  <!-- Hero Banner -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-base-100 via-base-200/30 to-base-300/20">
-      <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12">
-      <div class="text-center max-w-2xl mx-auto">
-        <h1 class="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-tight">
-          时光碎片
-        </h1>
-        <p class="text-base text-base-content/70 mb-6 leading-relaxed">
-          {SITE_DESCRIPTION}
-        </p>
-        <div class="flex items-center justify-center space-x-4 text-sm text-base-content/60">
-          <div class="flex items-center space-x-1">
-            <i class="ri-map-pin-line text-primary text-sm"></i>
-            <span>数字世界</span>
-          </div>
-          <div class="flex items-center space-x-1">
-            <i class="ri-time-line text-primary text-sm"></i>
-            <span>持续更新</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 主要内容区域 -->
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
       
-      <!-- 主要内容 -->
       <main class="lg:col-span-3">
         <slot />
       </main>
       
-      <!-- 侧边栏 -->
-      <aside class="lg:col-span-1">
-        <div class="sticky top-20 space-y-4">
-          
-          <!-- 个人信息卡片 -->
-          <div class="bg-base-200/40 backdrop-blur-sm rounded-xl p-4 border border-base-content/5">
-            <div class="flex items-center space-x-3 mb-3">
-              <div class="avatar">
-                <div class="w-10 h-10 rounded-full ring-1 ring-primary/20 ring-offset-1 ring-offset-base-100">
-                  <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Avatar" />
-                </div>
-              </div>
-              <div>
-                <h3 class="font-semibold text-sm">{SITE_AUTHOR}</h3>
-                <p class="text-base-content/60 text-xs">独立开发者</p>
-              </div>
-            </div>
-            <p class="text-base-content/70 text-xs mb-3 leading-relaxed">
-              热爱技术，喜欢记录生活中的点点滴滴。
-            </p>
-            <div class="flex space-x-2">
-              <a href="https://twitter.com/EveSunMaple" target="_blank" class="btn btn-circle btn-xs btn-ghost hover:btn-primary">
-                <i class="ri-twitter-line text-xs"></i>
-              </a>
-              <a href="https://github.com/EveSunMaple" target="_blank" class="btn btn-circle btn-xs btn-ghost hover:btn-primary">
-                <i class="ri-github-line text-xs"></i>
-              </a>
-              <a href="#" target="_blank" class="btn btn-circle btn-xs btn-ghost hover:btn-primary">
-                <i class="ri-telegram-line text-xs"></i>
-              </a>
-            </div>
-          </div>
-
-          <!-- 统计信息 -->
-          <div class="bg-base-200/40 backdrop-blur-sm rounded-xl p-4 border border-base-content/5">
-            <h3 class="font-semibold text-sm mb-3 flex items-center">
-              <i class="ri-bar-chart-line text-primary mr-1 text-sm"></i>
-              统计信息
-            </h3>
-            <div class="space-y-2">
-              <div class="flex justify-between items-center">
-                <span class="text-base-content/70 text-xs">动态数量</span>
-                <span class="font-medium text-xs">127</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-base-content/70 text-xs">博客文章</span>
-                <span class="font-medium text-xs">23</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-base-content/70 text-xs">总浏览量</span>
-                <span class="font-medium text-xs">12.5k</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 最近活动 -->
-          <div class="bg-base-200/40 backdrop-blur-sm rounded-xl p-4 border border-base-content/5">
-            <h3 class="font-semibold text-sm mb-3 flex items-center">
-              <i class="ri-pulse-line text-primary mr-1 text-sm"></i>
-              最近活动
-            </h3>
-            <div class="space-y-2 text-xs">
-              <div class="flex items-start space-x-2">
-                <div class="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 flex-shrink-0"></div>
-                <div>
-                  <p class="text-base-content/70">发布了新动态</p>
-                  <p class="text-base-content/50 text-xs">2小时前</p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-2">
-                <div class="w-1.5 h-1.5 bg-secondary rounded-full mt-1.5 flex-shrink-0"></div>
-                <div>
-                  <p class="text-base-content/70">更新了博客文章</p>
-                  <p class="text-base-content/50 text-xs">1天前</p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-2">
-                <div class="w-1.5 h-1.5 bg-accent rounded-full mt-1.5 flex-shrink-0"></div>
-                <div>
-                  <p class="text-base-content/70">添加了新功能</p>
-                  <p class="text-base-content/50 text-xs">3天前</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 标签云 -->
-          <div class="bg-base-200/40 backdrop-blur-sm rounded-xl p-4 border border-base-content/5">
-            <h3 class="font-semibold text-sm mb-3 flex items-center">
-              <i class="ri-price-tag-3-line text-primary mr-1 text-sm"></i>
-              热门标签
-            </h3>
-            <div class="flex flex-wrap gap-1">
-              <span class="badge badge-primary badge-sm">技术</span>
-              <span class="badge badge-secondary badge-sm">生活</span>
-              <span class="badge badge-accent badge-sm">思考</span>
-              <span class="badge badge-ghost badge-sm">随笔</span>
-              <span class="badge badge-outline badge-sm">摄影</span>
-            </div>
-          </div>
-
-        </div>
-      </aside>
-
+      <Sidebar 
+        headings={headings}
+        author={SITE_AUTHOR}
+        twitterHandle={TWITTER_HANDLE}
+        githubUrl={GITHUB_URL}
+        telegramUrl={TELEGRAM_URL}
+      />
     </div>
   </div>
 
-  <!-- 页脚 -->
-  <footer class="text-center py-8 text-base-content/60">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="flex justify-center space-x-4 mb-4">
-        <a href="https://twitter.com/EveSunMaple" target="_blank" class="hover:text-primary transition-colors duration-300">
-          <i class="ri-twitter-line text-lg"></i>
-        </a>
-        <a href="https://github.com/EveSunMaple" target="_blank" class="hover:text-primary transition-colors duration-300">
-          <i class="ri-github-line text-lg"></i>
-        </a>
-        <a href="#" target="_blank" class="hover:text-primary transition-colors duration-300">
-          <i class="ri-telegram-line text-lg"></i>
-        </a>
-      </div>
-      <p class="text-xs">
-        © {new Date().getFullYear()} {SITE_AUTHOR}. 用 ❤️ 和 Astro 构建
-      </p>
-    </div>
-  </footer>
+  <Footer 
+    author={SITE_AUTHOR}
+    twitterHandle={TWITTER_HANDLE}
+    githubUrl={GITHUB_URL}
+    telegramUrl={TELEGRAM_URL}
+  />
 
 </body>
 </html>

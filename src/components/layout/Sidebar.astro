@@ -1,0 +1,97 @@
+---
+// src/components/layout/Sidebar.astro
+import type { MarkdownHeading } from 'astro';
+import TOC from '@components/blog/TOC.astro'; // 引入我们之前创建的 TOC 组件
+
+export interface Props {
+  author: string;
+  twitterHandle: string;
+  githubUrl: string;
+  telegramUrl: string;
+  headings?: MarkdownHeading[]; // 设为可选 prop
+}
+
+const { headings, author, twitterHandle, githubUrl, telegramUrl } = Astro.props;
+
+// 默认内容的数据（保持不变）
+const stats = { posts: 127, articles: 23, views: '12.5k' };
+const recentActivities = [
+    { type: '新动态', time: '2小时前', color: 'bg-primary' },
+    { type: '新文章', time: '1天前', color: 'bg-secondary' },
+    { type: '新想法', time: '3天前', color: 'bg-accent' },
+];
+const popularTags = ['技术', '生活', '思考', '随笔', '摄影'];
+---
+<aside class="lg:col-span-1">
+  <div class="sticky top-20 space-y-4">
+    <div class="bg-base-200/40 backdrop-blur-sm rounded-xl p-4 border border-base-content/5">
+      <div class="flex items-center space-x-3 mb-3">
+        <div class="avatar">
+          <div class="w-10 h-10 rounded-full ring-1 ring-primary/20 ring-offset-1 ring-offset-base-100">
+            <img src="/avatar.webp" alt="Avatar" />
+          </div>
+        </div>
+        <div>
+          <h3 class="font-semibold text-sm">{author}</h3>
+          <p class="text-base-content/60 text-xs">独立开发者</p>
+        </div>
+      </div>
+      <p class="text-base-content/70 text-xs mb-3 leading-relaxed">
+        热爱技术，喜欢记录生活中的点点滴滴。
+      </p>
+      <div class="flex space-x-2">
+        <a href={`https://twitter.com/${twitterHandle.replace('@','')}`} target="_blank" class="btn btn-circle btn-xs btn-ghost hover:btn-primary">
+          <i class="ri-twitter-line text-xs"></i>
+        </a>
+        <a href={githubUrl} target="_blank" class="btn btn-circle btn-xs btn-ghost hover:btn-primary">
+          <i class="ri-github-line text-xs"></i>
+        </a>
+        <a href={telegramUrl} target="_blank" class="btn btn-circle btn-xs btn-ghost hover:btn-primary">
+          <i class="ri-telegram-line text-xs"></i>
+        </a>
+      </div>
+    </div>
+    {headings && headings.length > 0 ? (
+      <TOC headings={headings} />
+    ) : (
+      <>
+        <div class="bg-base-200/40 backdrop-blur-sm rounded-xl p-4 border border-base-content/5">
+          <h3 class="font-semibold text-sm mb-3 flex items-center">
+            <i class="ri-bar-chart-line text-primary mr-1 text-sm"></i>
+            统计信息
+          </h3>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center"><span class="text-base-content/70 text-xs">动态数量</span><span class="font-medium text-xs">{stats.posts}</span></div>
+            <div class="flex justify-between items-center"><span class="text-base-content/70 text-xs">博客文章</span><span class="font-medium text-xs">{stats.articles}</span></div>
+            <div class="flex justify-between items-center"><span class="text-base-content/70 text-xs">总浏览量</span><span class="font-medium text-xs">{stats.views}</span></div>
+          </div>
+        </div>
+
+        <div class="bg-base-200/40 backdrop-blur-sm rounded-xl p-4 border border-base-content/5">
+          <h3 class="font-semibold text-sm mb-3 flex items-center"><i class="ri-pulse-line text-primary mr-1 text-sm"></i>最近活动</h3>
+          <div class="space-y-2 text-xs">
+            {recentActivities.map(activity => (
+              <div class="flex items-start space-x-2">
+                <div class:list={["w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0", activity.color]}></div>
+                <div>
+                  <p class="text-base-content/70">{activity.type}</p>
+                  <p class="text-base-content/50 text-xs">{activity.time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="bg-base-200/40 backdrop-blur-sm rounded-xl p-4 border border-base-content/5">
+          <h3 class="font-semibold text-sm mb-3 flex items-center"><i class="ri-price-tag-3-line text-primary mr-1 text-sm"></i>热门标签</h3>
+          <div class="flex flex-wrap gap-1">
+            {popularTags.map((tag, index) => {
+              const badgeClasses = ['badge-primary', 'badge-secondary', 'badge-accent', 'badge-ghost', 'badge-outline'];
+              return <span class:list={["badge badge-sm", badgeClasses[index % badgeClasses.length]]}>{tag}</span>
+            })}
+          </div>
+        </div>
+      </>
+    )}
+  </div>
+</aside>
